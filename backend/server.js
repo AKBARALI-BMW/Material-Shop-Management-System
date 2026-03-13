@@ -1,14 +1,33 @@
-const express = require('express');
+const express = require("express");
+const connectDB = require("./config/db");
+const dotenv = require("dotenv");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const cors = require("cors");
 
+
+dotenv.config();
 const app = express();
-const port = 4000;
+
+connectDB();
+
 app.use(express.json());
 
-app.get("/", function(req, res){
-    res.send("server is run ");
-})
+//  corsse origin resoures    Enables CORS middleware to allow cross-origin requests.
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(port, function(){
-    console.log(`server is run on port ${port}`);
-}    
-);
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
