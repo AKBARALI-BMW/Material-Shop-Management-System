@@ -1,44 +1,39 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import Navbar from "./Navbar";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../redux/authSlice";
 
-/**
- * Layout wraps every protected page.
- * - Dark sidebar (fixed, 256px)
- * - White top navbar (sticky)
- * - Main content area with padding
- *
- * Use <Outlet /> here so React Router renders the correct page inside.
- */
-const Layout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+
+function Layout({ children, currentPage }) {
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
-      {/* ── Sidebar ── */}
-      <Sidebar />
+    <div className="flex h-screen bg-slate-50 overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar currentPage={currentPage} onLogout={handleLogout} />
 
-      {/* Mobile overlay when sidebar is open */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {/* Right side */}
+      <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Navbar */}
+        <Navbar currentPage={currentPage} user={user} />
 
-      {/* ── Main content: offset by sidebar width ── */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
-        {/* Top navbar */}
-        <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-
-        {/* Page content */}
-        <main className="flex-1 px-4 sm:px-6 py-6">
-          <Outlet />
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto p-6">
+          {children}
         </main>
       </div>
     </div>
   );
-};
+}
 
 export default Layout;
