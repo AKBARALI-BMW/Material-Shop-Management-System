@@ -5,8 +5,10 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 
-// add this import at top with other routes
+
 const settingsRoutes = require("./routes/settingsRoutes");
+const productRoutes = require("./routes/productRoutes");
+
 
 
 
@@ -28,7 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 // add this with other app.use lines
 app.use("/api/settings", settingsRoutes);
-
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");
@@ -39,3 +41,7 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+
+

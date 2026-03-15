@@ -26,11 +26,11 @@ const saveSettings = async (req, res) => {
        const { ownerName, shopName, shopAddress, city, country, phone, email} = req.body;
     
         //  findone and update if exists update, if not create new 
-        const settings = await ShopSettings.findOneAndUpdate(
-            {user: req.user._id},
-            {ownerName, shopName, shopAddress, city, country, phone, email},
-            {new: true, upsert: true}   // upsert create if not found
-        );
+     const settings = await ShopSettings.findOneAndUpdate(
+  { user: req.user._id },
+  { ownerName, shopName, shopAddress, city, country, phone, email },
+  { returnDocument: "after", upsert: true }   // ← replace new:true with returnDocument:'after'
+  );
 
         res.status(200).json(settings);
 
