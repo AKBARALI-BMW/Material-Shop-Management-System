@@ -3,8 +3,13 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
-import { Products, Orders, Reports, Inventory, Settings } from "./pages/PlaceholderPages";
+import { Orders, Reports, Inventory,} from "./pages/PlaceholderPages";
 import PrivateRoute from "./components/PrivateRoute";
+import Settings from "./pages/Settings"; 
+import Products from "./pages/Products";
+
+
+
 
 function App() {
   
@@ -20,7 +25,7 @@ function App() {
         <Route path="/customers"  element={<PrivateRoute><Customers /></PrivateRoute>} />
         <Route path="/products"   element={<PrivateRoute><Products /></PrivateRoute>} />
         <Route path="/orders"     element={<PrivateRoute><Orders /></PrivateRoute>} />
-        <Route path="/reports"    element={<PrivateRoute><Reports /></PrivateRoute>} />
+         <Route path="/reports"    element={<PrivateRoute><Reports /></PrivateRoute>} />
         <Route path="/inventory"  element={<PrivateRoute><Inventory /></PrivateRoute>} />
         <Route path="/settings"   element={<PrivateRoute><Settings /></PrivateRoute>} />
       </Routes>

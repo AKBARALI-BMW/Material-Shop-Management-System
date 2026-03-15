@@ -5,6 +5,11 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 
+// add this import at top with other routes
+const settingsRoutes = require("./routes/settingsRoutes");
+
+
+
 
 dotenv.config();
 const app = express();
@@ -21,6 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+// add this with other app.use lines
+app.use("/api/settings", settingsRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("Server is running");
