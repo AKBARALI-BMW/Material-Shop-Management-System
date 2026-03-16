@@ -10,6 +10,7 @@ const settingsRoutes = require("./routes/settingsRoutes");
 const productRoutes = require("./routes/productRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const inventoryRoutes = require("./routes/inventoryRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 
 
@@ -29,12 +30,12 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-// add this with other app.use lines
+
 app.use("/api/settings", settingsRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/inventory", inventoryRoutes);
-
+app.use("/api/orders", orderRoutes);
 
 
 app.get("/", (req, res) => {
