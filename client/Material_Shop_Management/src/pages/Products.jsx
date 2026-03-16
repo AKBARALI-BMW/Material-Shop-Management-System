@@ -138,13 +138,10 @@ function Products() {
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap">
           {categories.map((cat) => (
             <button key={cat} onClick={() => setActiveCategory(cat)}
-              className={`h-9 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap flex-shrink-0
+              className={`h-9 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap 
                 ${activeCategory === cat
                   ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
-                }`}
-            >
-              {cat}
+                  : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"  }`} > {cat}
             </button>
           ))}
         </div>

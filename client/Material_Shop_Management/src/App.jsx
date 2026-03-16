@@ -3,18 +3,19 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
-import { Orders, Reports, Inventory,} from "./pages/PlaceholderPages";
+import { Reports, } from "./pages/PlaceholderPages";
 import PrivateRoute from "./components/PrivateRoute";
 import Settings from "./pages/Settings"; 
 import Products from "./pages/Products";
-
+import Inventory from "./pages/Inventory";
+import Orders from "./pages/Orders";
 
 
 
 function App() {
   
   return (
-    <BrowserRouter>
+   <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/register" element={<Register />} />

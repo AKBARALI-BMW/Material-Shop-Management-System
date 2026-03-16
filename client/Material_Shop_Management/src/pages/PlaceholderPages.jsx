@@ -18,6 +18,5 @@ function ComingSoon({ title, subtitle }) {
   );
 }
 
-export function Orders()    { return <ComingSoon title="Orders"    subtitle="View and manage all orders." />; }
+
 export function Reports()   { return <ComingSoon title="Reports"   subtitle="Sales analytics and reports." />; }
-export function Inventory() { return <ComingSoon title="Inventory" subtitle="Track stock levels." />; }
