@@ -9,6 +9,7 @@ const cors = require("cors");
 const settingsRoutes = require("./routes/settingsRoutes");
 const productRoutes = require("./routes/productRoutes");
 const customerRoutes = require("./routes/customerRoutes");
+const inventoryRoutes = require("./routes/inventoryRoutes");
 
 
 
@@ -32,6 +33,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/customers", customerRoutes);
+app.use("/api/inventory", inventoryRoutes);
+
 
 
 app.get("/", (req, res) => {
