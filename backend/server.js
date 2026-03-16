@@ -8,7 +8,7 @@ const cors = require("cors");
 
 const settingsRoutes = require("./routes/settingsRoutes");
 const productRoutes = require("./routes/productRoutes");
-
+const customerRoutes = require("./routes/customerRoutes");
 
 
 
@@ -31,6 +31,8 @@ app.use("/api/user", userRoutes);
 // add this with other app.use lines
 app.use("/api/settings", settingsRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/customers", customerRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("Server is running");
