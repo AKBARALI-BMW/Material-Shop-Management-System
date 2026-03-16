@@ -4,14 +4,19 @@ const Product = require("../models/Product");
 // get all product as Inventory 
 
 const getInventory = async (req, res) => {
-    try{
+  try {
+    const inventory = await Product.find({ user: req.user._id }).sort({ createdAt: -1 });
 
-        const inventory = (await Product.find({user: req.user._id})).toSorted({createdAt: -1 });
-        res.status(200).json(inventory || []);
+    // ✅ add default minStock if missing
+    const result = inventory.map((item) => ({
+      ...item.toObject(),
+      minStock: item.minStock || 10,
+    }));
 
-    }  catch (error){
-        res.status(500).json({message: error.message});
-    }
+    res.status(200).json(result || []);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // patch set stock (replace current value )
@@ -62,4 +67,4 @@ const getLowStock = async (req, res) => {
     }
 };
 
-module.eports = {getInventory, setStock, addStock, getLowStock};
+module.exports = { getInventory, setStock, addStock, getLowStock };

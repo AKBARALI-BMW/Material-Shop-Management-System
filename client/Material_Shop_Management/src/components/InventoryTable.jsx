@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setStock, addStock } from "../redux/inventorySlice";
 
 const statusBadge = {
   "In Stock":  "bg-green-100 text-green-700",
@@ -13,16 +15,23 @@ const statusDot = {
 };
 
 // ── Update Stock Modal ─────────────────────────────────────────────
-function UpdateStockModal({ item, onUpdate, onClose }) {
+function UpdateStockModal({ item, onClose }) {
+  const dispatch  = useDispatch();
   const [newStock, setNewStock] = useState(item.stock);
-  const [mode,     setMode]     = useState("set"); // "set" or "add"
+  const [mode,     setMode]     = useState("set");
 
   const previewStock = mode === "add"
     ? item.stock + Number(newStock || 0)
     : Number(newStock || 0);
 
+  // ✅ dispatch correct action based on mode
   const handleSubmit = () => {
-    onUpdate(item.id || item._id, previewStock);
+    if (!item._id) return;
+    if (mode === "set") {
+      dispatch(setStock({ id: item._id, stock: Number(newStock) }));
+    } else {
+      dispatch(addStock({ id: item._id, stock: Number(newStock) }));
+    }
     onClose();
   };
 
@@ -31,7 +40,7 @@ function UpdateStockModal({ item, onUpdate, onClose }) {
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-sm p-6 z-10">
 
-        {/* Header */}
+       
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-sm font-semibold text-slate-800">Update Stock</h3>
           <button onClick={onClose}
@@ -47,9 +56,9 @@ function UpdateStockModal({ item, onUpdate, onClose }) {
           <p className="text-sm font-semibold text-slate-800">{item.name}</p>
           <div className="flex items-center gap-3 mt-1">
             <p className="text-xs text-slate-500">
-              Current stock: <span className="font-medium text-slate-700">{item.stock} {item.unit}</span>
+              Current: <span className="font-medium text-slate-700">{item.stock} {item.unit}</span>
             </p>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusBadge[item.status]}`}>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusBadge[item.status] || statusBadge["In Stock"]}`}>
               {item.status}
             </span>
           </div>
@@ -62,24 +71,20 @@ function UpdateStockModal({ item, onUpdate, onClose }) {
 
         {/* Mode toggle */}
         <div className="flex gap-2 mb-4">
-          <button
-            onClick={() => { setMode("set"); setNewStock(item.stock); }}
+          <button onClick={() => { setMode("set"); setNewStock(item.stock); }}
             className={`flex-1 h-8 text-xs font-medium rounded-lg border transition-all
               ${mode === "set"
                 ? "bg-indigo-600 text-white border-indigo-600"
                 : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
-              }`}
-          >
+              }`}>
             Set Stock
           </button>
-          <button
-            onClick={() => { setMode("add"); setNewStock(""); }}
+          <button onClick={() => { setMode("add"); setNewStock(""); }}
             className={`flex-1 h-8 text-xs font-medium rounded-lg border transition-all
               ${mode === "add"
                 ? "bg-indigo-600 text-white border-indigo-600"
                 : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
-              }`}
-          >
+              }`}>
             Add Stock
           </button>
         </div>
@@ -89,10 +94,7 @@ function UpdateStockModal({ item, onUpdate, onClose }) {
           <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
             {mode === "set" ? "New Quantity" : "Add Quantity"}
           </label>
-          <input
-            type="number"
-            min="0"
-            value={newStock}
+          <input type="number" min="0" value={newStock}
             onChange={(e) => setNewStock(e.target.value)}
             placeholder={mode === "set" ? "Enter new stock" : "Enter quantity to add"}
             className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
@@ -107,7 +109,7 @@ function UpdateStockModal({ item, onUpdate, onClose }) {
           </p>
         </div>
 
-        {/* Buttons */}
+
         <div className="flex gap-2">
           <button onClick={handleSubmit}
             className="flex-1 h-10 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition">
@@ -124,11 +126,12 @@ function UpdateStockModal({ item, onUpdate, onClose }) {
 }
 
 // ── Main Component ─────────────────────────────────────────────────
-function InventoryTable({ filtered, onUpdateStock }) {
+function InventoryTable({ filtered }) {
   const [stockModal, setStockModal] = useState(null);
 
+  // ✅ safe array — only items with _id
   const safeFiltered = Array.isArray(filtered)
-    ? filtered.filter((i) => i && (i._id || i.id))
+    ? filtered.filter((i) => i && i._id)
     : [];
 
   return (
@@ -165,10 +168,10 @@ function InventoryTable({ filtered, onUpdateStock }) {
                 </tr>
               ) : (
                 safeFiltered.map((item) => (
-                  <tr key={item._id || item.id}
+                  <tr key={item._id}
                     className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition">
 
-                    {/* Product */}
+
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2">
                         <div className={`w-2 h-2 rounded-full flex-shrink-0 ${statusDot[item.status] || "bg-slate-300"}`} />
@@ -179,15 +182,15 @@ function InventoryTable({ filtered, onUpdateStock }) {
                       </div>
                     </td>
 
-                    {/* Category */}
+                  
                     <td className="py-3 pr-4 text-slate-500 whitespace-nowrap">{item.category}</td>
 
-                    {/* Price */}
+                  
                     <td className="py-3 pr-4 text-slate-800 whitespace-nowrap">
                       Rs {Number(item.price || 0).toLocaleString()}
                     </td>
 
-                    {/* Stock with progress bar */}
+
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2">
                         <span className={`font-semibold whitespace-nowrap ${
@@ -197,7 +200,7 @@ function InventoryTable({ filtered, onUpdateStock }) {
                         }`}>
                           {item.stock}
                         </span>
-                        {/* Stock progress bar */}
+
                         <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden hidden sm:block">
                           <div
                             className={`h-full rounded-full transition-all ${
@@ -215,24 +218,22 @@ function InventoryTable({ filtered, onUpdateStock }) {
                       </div>
                     </td>
 
-                    {/* Min Stock Level */}
+                  
                     <td className="py-3 pr-4 text-slate-500 whitespace-nowrap">
-                      {item.minStock}
+                      {item.minStock || 10}
                     </td>
 
-                    {/* Status */}
+
                     <td className="py-3 pr-4 whitespace-nowrap">
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusBadge[item.status] || statusBadge["In Stock"]}`}>
                         {item.status}
                       </span>
                     </td>
 
-                    {/* Action */}
+
                     <td className="py-3">
-                      <button
-                        onClick={() => setStockModal(item)}
-                        className="flex items-center gap-1 h-7 px-2.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition whitespace-nowrap"
-                      >
+                      <button onClick={() => setStockModal(item)}
+                        className="flex items-center gap-1 h-7 px-2.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition whitespace-nowrap">
                         <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none">
                           <path d="M2 8a6 6 0 1012 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
                           <path d="M14 4v4h-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
@@ -252,7 +253,7 @@ function InventoryTable({ filtered, onUpdateStock }) {
       {stockModal && (
         <UpdateStockModal
           item={stockModal}
-          onUpdate={onUpdateStock}
+
           onClose={() => setStockModal(null)}
         />
       )}
