@@ -8,7 +8,7 @@ function InvoiceSlip({ data, onClose }) {
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-md z-10 max-h-[90vh] overflow-y-auto">
 
-        {/* Action buttons */}
+        {/* Action Buttons */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100 print:hidden">
           <h3 className="text-sm font-semibold text-slate-800">Sale Invoice</h3>
           <div className="flex items-center gap-2">
@@ -31,65 +31,122 @@ function InvoiceSlip({ data, onClose }) {
         {/* Invoice Content */}
         <div className="p-5">
 
-          {/* Shop Header */}
-          <div className="text-center mb-4 pb-4 border-b border-slate-200">
-            <h2 className="text-base font-bold text-slate-800">
-              {shop?.shopName || "Shop Name"}
-            </h2>
-            {shop?.shopAddress && (
-              <p className="text-xs text-slate-500 mt-0.5">
-                {[shop.shopAddress, shop.city, shop.country].filter(Boolean).join(", ")}
-              </p>
-            )}
-            {shop?.phone && (
-              <p className="text-xs text-slate-500">Contact: {shop.phone}</p>
-            )}
-            {shop?.phone2 && (
-              <p className="text-xs text-slate-500">Contact: {shop.phone2}</p>
-            )}
-            <p className="text-xs font-semibold text-indigo-600 mt-1">
-              Invoice# {order?.orderNumber}
-            </p>
-          </div>
+          {/* ── HEADER ── Logo left | Shop info center ── */}
+          <div className="flex items-center gap-4 mb-4 pb-4 border-b-2 border-slate-800">
 
-          {/* Customer + Date */}
-          <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
-            <div>
-              <p className="text-slate-500">Customer:</p>
-              <p className="font-semibold text-slate-800">{order?.customer?.name}</p>
-              <p className="text-slate-500">{order?.customer?.phone}</p>
-              {order?.customer?.address && (
-                <p className="text-slate-500">{order.customer.address}</p>
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              {shop?.logoImage ? (
+                <img
+                  src={shop.logoImage}
+                  alt="Shop Logo"
+                  className="w-14 h-14 object-contain rounded-lg border border-slate-200"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-lg bg-indigo-100 flex items-center justify-center border border-indigo-200">
+                  <svg className="w-7 h-7 text-indigo-600" viewBox="0 0 20 20" fill="none">
+                    <path d="M2 6.5L3 2h14l1 4.5v.5a3 3 0 01-6 0 3 3 0 01-6 0v-.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+                    <path d="M2 17V9.5A3 3 0 005 10a3 3 0 003-1.5A3 3 0 0011 10a3 3 0 003-1.5A3 3 0 0017 10V17H2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+                  </svg>
+                </div>
               )}
             </div>
-            <div className="text-right">
-              <p className="text-slate-500">Date:</p>
-              <p className="font-semibold text-slate-800">
-                {order?.createdAt ? new Date(order.createdAt).toLocaleDateString("en-PK", {
-                  day: "2-digit", month: "short", year: "numeric"
-                }) : "—"}
-              </p>
+
+            {/* Shop Info — center */}
+            <div className="flex-1 text-center">
+              <h2 className="text-lg font-bold text-slate-800 tracking-wide">
+                {shop?.shopName || "Shop Name"}
+              </h2>
+              {(shop?.shopAddress || shop?.city) && (
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {[shop?.shopAddress, shop?.city, shop?.country].filter(Boolean).join(", ")}
+                </p>
+              )}
+              <div className="flex items-center justify-center gap-3 mt-1 flex-wrap">
+                {shop?.phone && (
+                  <span className="text-xs text-slate-600">
+                    📞 {shop.phone}
+                  </span>
+                )}
+                {shop?.email && (
+                  <span className="text-xs text-slate-600">
+                    ✉ {shop.email}
+                  </span>
+                )}
+              </div>
             </div>
+
           </div>
 
-          {/* Items Table */}
+          {/* ── BODY — Customer left | Invoice# right ── */}
+          <div className="flex items-start justify-between mb-4 pb-3 border-b border-slate-200">
+
+            {/* Customer Info — left */}
+            <div className="text-xs space-y-0.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-500 font-medium">Customer:</span>
+                <span className="font-semibold text-slate-800">
+                  {order?.customer?.name || "—"}
+                </span>
+              </div>
+              {order?.customer?.phone && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-slate-500 font-medium">Phone:</span>
+                  <span className="text-slate-700">{order.customer.phone}</span>
+                </div>
+              )}
+              {(order?.customer?.address || order?.customer?.city) && (
+                <div className="flex items-start gap-1.5">
+                  <span className="text-slate-500 font-medium mt-0.5">Address:</span>
+                  <span className="text-slate-700">
+                    {[order?.customer?.address, order?.customer?.city].filter(Boolean).join(", ")}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Invoice# + Date — right */}
+            <div className="text-xs text-right space-y-0.5 flex-shrink-0 ml-4">
+              <div>
+                <span className="text-slate-500 font-medium">Invoice#</span>
+                <span className="ml-1.5 font-bold text-indigo-600">
+                  {order?.orderNumber || "—"}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-500 font-medium">Date:</span>
+                <span className="ml-1.5 text-slate-700">
+                  {order?.createdAt
+                    ? new Date(order.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit", month: "short", year: "numeric"
+                      })
+                    : "—"}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ── ITEMS TABLE ── */}
           <table className="w-full text-xs mb-4">
             <thead>
-              <tr className="bg-slate-50 border border-slate-200">
-                <th className="text-left px-2 py-1.5 font-semibold text-slate-600">#</th>
-                <th className="text-left px-2 py-1.5 font-semibold text-slate-600">Item</th>
-                <th className="text-center px-2 py-1.5 font-semibold text-slate-600">Qty</th>
-                <th className="text-right px-2 py-1.5 font-semibold text-slate-600">Price</th>
-                <th className="text-right px-2 py-1.5 font-semibold text-slate-600">Amount</th>
+              <tr className="bg-slate-800 text-white">
+                <th className="text-left px-2 py-2 rounded-tl-md">#</th>
+                <th className="text-left px-2 py-2">Item</th>
+                <th className="text-center px-2 py-2">Qty</th>
+                <th className="text-right px-2 py-2">Price</th>
+                <th className="text-right px-2 py-2 rounded-tr-md">Amount</th>
               </tr>
             </thead>
             <tbody>
               {(order?.items || []).map((item, i) => (
-                <tr key={i} className="border-b border-slate-100">
+                <tr key={i} className={i % 2 === 0 ? "bg-slate-50" : "bg-white"}>
                   <td className="px-2 py-1.5 text-slate-500">{i + 1}</td>
                   <td className="px-2 py-1.5 text-slate-800 font-medium">{item.name}</td>
                   <td className="px-2 py-1.5 text-center text-slate-600">{item.qty}</td>
-                  <td className="px-2 py-1.5 text-right text-slate-600">{Number(item.price).toLocaleString()}</td>
+                  <td className="px-2 py-1.5 text-right text-slate-600">
+                    {Number(item.price).toLocaleString()}
+                  </td>
                   <td className="px-2 py-1.5 text-right font-semibold text-slate-800">
                     {(item.qty * item.price).toLocaleString()}
                   </td>
@@ -98,34 +155,53 @@ function InvoiceSlip({ data, onClose }) {
             </tbody>
           </table>
 
-          {/* Totals */}
-          <div className="border-t border-slate-200 pt-3 space-y-1.5 text-xs">
+          {/* ── TOTALS ── */}
+          <div className="border-t-2 border-slate-800 pt-3 space-y-1.5 text-xs mb-4">
             <div className="flex justify-between">
-              <span className="text-slate-500">ٹوٹل بل</span>
+              <span className="text-slate-500">ٹوٹل بل (Total Bill)</span>
               <span className="font-semibold text-slate-800">
-                {(order?.totalAmount || 0).toLocaleString()}
+                Rs {(order?.totalAmount || 0).toLocaleString()}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">ادا شدہ</span>
+              <span className="text-slate-500">ادا شدہ (Paid)</span>
               <span className="font-semibold text-green-600">
-                {(order?.paidAmount || 0).toLocaleString()}
+                Rs {(order?.paidAmount || 0).toLocaleString()}
               </span>
             </div>
-            <div className="flex justify-between border-t border-slate-200 pt-1.5">
-              <span className="text-slate-600 font-semibold">بقایا</span>
-              <span className="font-bold text-red-600 text-sm">
-                {(order?.dueAmount || 0).toLocaleString()}
+            <div className="flex justify-between bg-red-50 px-2 py-1.5 rounded-lg border border-red-100">
+              <span className="font-bold text-red-700">بقایا (Balance Due)</span>
+              <span className="font-bold text-red-700 text-sm">
+                Rs {(order?.dueAmount || 0).toLocaleString()}
               </span>
             </div>
           </div>
 
           {/* Due date */}
           {order?.dueDate && (
-            <p className="text-xs text-slate-500 mt-3">
-              Due Date: {new Date(order.dueDate).toLocaleDateString()}
+            <p className="text-xs text-slate-500 mb-4">
+              Due Date: {new Date(order.dueDate).toLocaleDateString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric"
+              })}
             </p>
           )}
+
+          {/* ── FOOTER MESSAGE ── */}
+          <div className="border-t border-dashed border-slate-300 pt-3 text-center">
+            <p className="text-xs font-semibold text-slate-700 mb-1">
+              Thank you for your business!
+            </p>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              We are committed to providing you with the finest quality
+              construction materials. Your trust and satisfaction are our
+              greatest achievement. We look forward to serving you again.
+            </p>
+            {shop?.shopName && (
+              <p className="text-xs font-bold text-indigo-600 mt-2">
+                — {shop.shopName} —
+              </p>
+            )}
+          </div>
 
         </div>
       </div>
@@ -134,3 +210,4 @@ function InvoiceSlip({ data, onClose }) {
 }
 
 export default InvoiceSlip;
+
