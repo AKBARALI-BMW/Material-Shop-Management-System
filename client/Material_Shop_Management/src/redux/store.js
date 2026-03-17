@@ -3,7 +3,9 @@ import authReducer from "./authSlice";
 import settingsReducer from "./settingsSlice"; 
 import productReducer  from "./productSlice"; 
 import customerReducer from "./customerSlice"; 
-import inventoryReducer from "./inventorySlice";   
+import inventoryReducer from "./inventorySlice"; 
+import orderReducer     from "./orderSlice"; 
+
 
 
 export const store = configureStore({
@@ -13,6 +15,8 @@ export const store = configureStore({
         products: productReducer,
          customers: customerReducer,
          inventory: inventoryReducer, 
+         orders:    orderReducer,
+
 
     },
 });

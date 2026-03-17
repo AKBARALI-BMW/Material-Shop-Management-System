@@ -1,113 +1,65 @@
-import { useState } from "react";
-import Layout from "./Layout";
-import OrderList from "../components/Orderlist";
-import AddOrderModal from "../components/orders/AddOrderModal";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrders, createOrder, deleteOrder } from "../redux/orderSlice";
+import { fetchCustomers } from "../redux/customerSlice";
+import { fetchProducts }  from "../redux/productSlice";
+import Layout      from "./Layout";
+import OrderList   from "../components/OrderList";
+import AddOrderModal  from "../components/orders/AddOrderModal";
 import ViewOrderModal from "../components/orders/ViewOrderModal";
 
-// ── Dummy Data (replaced by Redux + API later) ─────────────────────
-const initialOrders = [
-  {
-    id: 1,
-    orderNumber: "ORD-001",
-    customer:    { name: "Ali Khan", phone: "0300-1234567" },
-    items: [
-      { product: "Cement", qty: 10, price: 1200 },
-      { product: "Bricks", qty: 100, price: 15  },
-    ],
-    totalAmount:  13500,
-    paidAmount:   13500,
-    dueDate:      "2026-04-10",
-    status:       "Paid",
-    createdAt:    "2026-03-01",
-  },
-  {
-    id: 2,
-    orderNumber: "ORD-002",
-    customer:    { name: "Umar Farooq", phone: "0311-9876543" },
-    items: [
-      { product: "Steel Rod 12mm", qty: 5,  price: 3500 },
-      { product: "PVC Pipe 1inch", qty: 10, price: 450  },
-    ],
-    totalAmount:  22000,
-    paidAmount:   10000,
-    dueDate:      "2026-04-15",
-    status:       "Partial",
-    createdAt:    "2026-03-05",
-  },
-  {
-    id: 3,
-    orderNumber: "ORD-003",
-    customer:    { name: "Bilal Ahmed", phone: "0321-4567890" },
-    items: [
-      { product: "Cement", qty: 20, price: 1200 },
-    ],
-    totalAmount:  24000,
-    paidAmount:   0,
-    dueDate:      "2026-04-20",
-    status:       "Pending",
-    createdAt:    "2026-03-10",
-  },
-  {
-    id: 4,
-    orderNumber: "ORD-004",
-    customer:    { name: "Zara Malik", phone: "0333-1112233" },
-    items: [
-      { product: "Wash Basin", qty: 2, price: 4500 },
-      { product: "Tiles",      qty: 50, price: 120 },
-    ],
-    totalAmount:  15000,
-    paidAmount:   15000,
-    dueDate:      "2026-03-30",
-    status:       "Paid",
-    createdAt:    "2026-03-12",
-  },
-];
+
 
 const statusFilters = ["All", "Paid", "Partial", "Pending"];
 
-// ── Main Component ─────────────────────────────────────────────────
+
+
 function Orders() {
-  const [orders,       setOrders]       = useState(initialOrders);
+  const dispatch = useDispatch();
+
+  const { orders,    loading, error } = useSelector((state) => state.orders);
+  const { customers }                 = useSelector((state) => state.customers);
+  const { products }                  = useSelector((state) => state.products);
+
+  // ✅ always safe arrays
+  const safeOrders    = Array.isArray(orders)    ? orders    : [];
+  const safeCustomers = Array.isArray(customers) ? customers : [];
+  const safeProducts  = Array.isArray(products)  ? products  : [];
+
   const [search,       setSearch]       = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [showAddModal, setShowAddModal] = useState(false);
   const [viewOrder,    setViewOrder]    = useState(null);
 
-  // ── Filter ──
-  const filtered = orders.filter((o) => {
+  // ✅ load all data on page open
+  useEffect(() => {
+    dispatch(fetchOrders());
+    dispatch(fetchCustomers());
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  // ✅ filter
+  const filtered = safeOrders.filter((o) => {
     const matchSearch =
-      o.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
-      o.customer.name.toLowerCase().includes(search.toLowerCase());
+      (o.orderNumber || "").toLowerCase().includes(search.toLowerCase()) ||
+      (o.customer?.name || "").toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "All" || o.status === statusFilter;
     return matchSearch && matchStatus;
   });
 
-  // ── ADD ──
-  const handleAdd = (newOrder) => {
-    const order = {
-      ...newOrder,
-      id:          Date.now(),
-      orderNumber: `ORD-00${orders.length + 1}`,
-      createdAt:   new Date().toISOString().split("T")[0],
-      status:
-        newOrder.paidAmount >= newOrder.totalAmount ? "Paid"
-        : newOrder.paidAmount > 0 ? "Partial"
-        : "Pending",
-    };
-    setOrders([order, ...orders]);
+  // ✅ ADD — dispatch to Redux → backend
+  const handleAdd = (formData) => {
+    dispatch(createOrder(formData));
     setShowAddModal(false);
   };
 
-  // ── DELETE ──
+  // ✅ DELETE — dispatch to Redux → backend
   const handleDelete = (id) => {
-    setOrders(orders.filter((o) => o.id !== id));
+    dispatch(deleteOrder(id));
   };
 
-  // ── Stats ──
-  const safeOrders  = Array.isArray(orders) ? orders : [];
-  
-  // const totalRev    = safeOrders.reduce((s, o) => s + o.totalAmount, 0); 
-  const totalDue    = safeOrders.reduce((s, o) => s + (o.totalAmount - o.paidAmount), 0);
+  // ✅ stats
+  const totalDue = safeOrders.reduce((s, o) => s + (o.dueAmount || 0), 0);
 
   return (
     <Layout>
@@ -132,10 +84,10 @@ function Orders() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
         {[
-          { label: "Total Orders",   value: safeOrders.length,                                     color: "text-slate-800" },
-          { label: "Paid",           value: safeOrders.filter(o => o.status === "Paid").length,    color: "text-green-600" },
-          { label: "Pending",        value: safeOrders.filter(o => o.status !== "Paid").length,    color: "text-amber-600" },
-          { label: "Total Due",      value: `Rs ${totalDue.toLocaleString()}`,                     color: "text-red-600"   },
+          { label: "Total Orders", value: safeOrders.length,                                    color: "text-slate-800" },
+          { label: "Paid",         value: safeOrders.filter(o => o.status === "Paid").length,   color: "text-green-600" },
+          { label: "Pending",      value: safeOrders.filter(o => o.status !== "Paid").length,   color: "text-amber-600" },
+          { label: "Total Due",    value: `Rs ${totalDue.toLocaleString()}`,                    color: "text-red-600"   },
         ].map((s) => (
           <div key={s.label} className="bg-white border border-slate-200 rounded-xl p-3">
             <p className="text-xs text-slate-500 mb-1">{s.label}</p>
@@ -153,11 +105,8 @@ function Orders() {
               <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
             </svg>
           </span>
-          <input
-            type="text"
-            placeholder="Search by order no or customer..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+          <input type="text" placeholder="Search by order no or customer..."
+            value={search} onChange={(e) => setSearch(e.target.value)}
             className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
           />
         </div>
@@ -175,7 +124,23 @@ function Orders() {
         </div>
       </div>
 
-      {/* Order List Component */}
+      {/* Error */}
+      {error && (
+        <div className="mb-4 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
+          <svg className="w-4 h-4 shrink-0" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2"/>
+            <path d="M7 4v3.5M7 9.5v.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+          </svg>
+          {error}
+        </div>
+      )}
+
+      {/* Loading */}
+      {loading && (
+        <div className="mb-4 text-sm text-slate-500">Loading orders...</div>
+      )}
+
+      {/* Order List */}
       <OrderList
         filtered={filtered}
         onView={(order) => setViewOrder(order)}
@@ -185,6 +150,8 @@ function Orders() {
       {/* Add Order Modal */}
       {showAddModal && (
         <AddOrderModal
+          customers={safeCustomers}
+          products={safeProducts}
           onAdd={handleAdd}
           onClose={() => setShowAddModal(false)}
         />

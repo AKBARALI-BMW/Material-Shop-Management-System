@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+
+
 function Modal({ title, onClose, children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -20,83 +22,105 @@ function Modal({ title, onClose, children }) {
   );
 }
 
-function Field({ label, required, ...props }) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-        {label} {required && <span className="text-red-400">*</span>}
-      </label>
-      <input
-        {...props}
-        className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
-      />
-    </div>
-  );
-}
+const emptyItem = { productId: "", name: "", qty: 1, price: "" };
 
-const emptyItem = { product: "", qty: 1, price: "" };
+function AddOrderModal({ customers, products, onAdd, onClose }) {
+  const [customerId,  setCustomerId]  = useState("");
+  const [items,       setItems]       = useState([{ ...emptyItem }]);
+  const [paidAmount,  setPaidAmount]  = useState("");
+  const [dueDate,     setDueDate]     = useState("");
+  const [notes,       setNotes]       = useState("");
+  const [formError,   setFormError]   = useState("");
 
-function AddOrderModal({ onAdd, onClose }) {
-  const [customerName,  setCustomerName]  = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [items,         setItems]         = useState([{ ...emptyItem }]);
-  const [paidAmount,    setPaidAmount]    = useState("");
-  const [dueDate,       setDueDate]       = useState("");
+  const safeCustomers = Array.isArray(customers) ? customers : [];
+  const safeProducts  = Array.isArray(products)  ? products  : [];
 
-  // ── Item handlers ──
-  const handleItemChange = (index, field, value) => {
+  // ✅ when product selected — auto fill price
+  const handleProductSelect = (index, productId) => {
+    const product = safeProducts.find((p) => p._id === productId);
     const updated = [...items];
+    updated[index] = {
+      ...updated[index],
+      productId: productId,
+      name:      product?.name  || "",
+      price:     product?.price || "",
+    };
+    setItems(updated);
+  };
+
+  const handleItemChange = (index, field, value) => {
+    const updated  = [...items];
     updated[index][field] = value;
     setItems(updated);
   };
 
-  const addItem = () => setItems([...items, { ...emptyItem }]);
-
+  const addItem    = () => setItems([...items, { ...emptyItem }]);
   const removeItem = (index) => {
     if (items.length === 1) return;
     setItems(items.filter((_, i) => i !== index));
   };
 
-  // ── Calculate total ──
+  // ✅ calculate total
   const totalAmount = items.reduce(
     (sum, item) => sum + (Number(item.qty) * Number(item.price) || 0), 0
   );
 
-  // ── Submit ──
+  // ✅ submit — sends productId to backend
   const handleSubmit = () => {
-    if (!customerName || !customerPhone) return;
-    if (items.some((i) => !i.product || !i.price)) return;
+    setFormError("");
+
+    if (!customerId) {
+      setFormError("Please select a customer."); return;
+    }
+    if (items.some((i) => !i.productId || !i.price || !i.qty)) {
+      setFormError("Please fill all item fields."); return;
+    }
 
     onAdd({
-      customer:    { name: customerName, phone: customerPhone },
-      items:       items.map((i) => ({ ...i, qty: Number(i.qty), price: Number(i.price) })),
-      totalAmount,
-      paidAmount:  Number(paidAmount) || 0,
-      dueDate:     dueDate || "",
+      customerId,
+      items: items.map((i) => ({
+        productId: i.productId,
+        qty:       Number(i.qty),
+        price:     Number(i.price),
+      })),
+      paidAmount: Number(paidAmount) || 0,
+      dueDate:    dueDate || null,
+      notes,
     });
   };
 
   return (
     <Modal title="New Order" onClose={onClose}>
 
-      {/* Customer Info */}
-      <div className="mb-4">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
-          Customer Info
-        </p>
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="Customer Name" value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            placeholder="e.g. Ali Khan" required />
-          <Field label="Phone" value={customerPhone}
-            onChange={(e) => setCustomerPhone(e.target.value)}
-            placeholder="e.g. 0300-1234567" required />
+      {/* Error */}
+      {formError && (
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 text-xs mb-4">
+          {formError}
         </div>
+      )}
+
+      {/* Customer Select */}
+      <div className="mb-4">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+          Customer
+        </p>
+        <select
+          value={customerId}
+          onChange={(e) => setCustomerId(e.target.value)}
+          className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+        >
+          <option value="">— Select Customer —</option>
+          {safeCustomers.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name} — {c.phone}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Order Items */}
       <div className="mb-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-2">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
             Order Items
           </p>
@@ -112,29 +136,58 @@ function AddOrderModal({ onAdd, onClose }) {
         <div className="space-y-2">
           {items.map((item, index) => (
             <div key={index} className="flex items-end gap-2">
+
+              {/* Product dropdown */}
               <div className="flex-1">
-                <Field label={index === 0 ? "Product" : ""}
-                  value={item.product}
-                  onChange={(e) => handleItemChange(index, "product", e.target.value)}
-                  placeholder="e.g. Cement" required />
+                {index === 0 && (
+                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
+                    Product
+                  </label>
+                )}
+                <select
+                  value={item.productId}
+                  onChange={(e) => handleProductSelect(index, e.target.value)}
+                  className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                >
+                  <option value="">— Select —</option>
+                  {safeProducts.map((p) => (
+                    <option key={p._id} value={p._id}>
+                      {p.name} (Stock: {p.stock})
+                    </option>
+                  ))}
+                </select>
               </div>
+
+              {/* Qty */}
               <div className="w-16">
-                <Field label={index === 0 ? "Qty" : ""}
-                  type="number" min="1" value={item.qty}
+                {index === 0 && (
+                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
+                    Qty
+                  </label>
+                )}
+                <input type="number" min="1" value={item.qty}
                   onChange={(e) => handleItemChange(index, "qty", e.target.value)}
-                  placeholder="1" />
+                  className="w-full h-10 px-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                />
               </div>
+
+              {/* Price */}
               <div className="w-24">
-                <Field label={index === 0 ? "Price" : ""}
-                  type="number" value={item.price}
+                {index === 0 && (
+                  <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
+                    Price
+                  </label>
+                )}
+                <input type="number" value={item.price}
                   onChange={(e) => handleItemChange(index, "price", e.target.value)}
-                  placeholder="1200" required />
+                  placeholder="0"
+                  className="w-full h-10 px-2 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                />
               </div>
-              <button
-                onClick={() => removeItem(index)}
-                disabled={items.length === 1}
-                className="h-10 w-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition disabled:opacity-30 flex-shrink-0"
-              >
+
+              {/* Remove */}
+              <button onClick={() => removeItem(index)} disabled={items.length === 1}
+                className="h-10 w-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition disabled:opacity-30 flex-shrink-0">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none">
                   <path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
                 </svg>
@@ -154,17 +207,30 @@ function AddOrderModal({ onAdd, onClose }) {
         </div>
       </div>
 
-      {/* Payment Info */}
+      {/* Payment */}
       <div className="mb-5">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
           Payment
         </p>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Paid Amount" type="number" value={paidAmount}
-            onChange={(e) => setPaidAmount(e.target.value)}
-            placeholder="0" />
-          <Field label="Due Date (optional)" type="date" value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)} />
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+              Paid Amount
+            </label>
+            <input type="number" value={paidAmount}
+              onChange={(e) => setPaidAmount(e.target.value)} placeholder="0"
+              className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+              Due Date
+            </label>
+            <input type="date" value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+            />
+          </div>
         </div>
 
         {/* Payment summary */}
@@ -172,11 +238,15 @@ function AddOrderModal({ onAdd, onClose }) {
           <div className="mt-3 grid grid-cols-3 gap-2">
             <div className="bg-slate-50 rounded-lg p-2 text-center">
               <p className="text-xs text-slate-500">Total</p>
-              <p className="text-sm font-semibold text-slate-800">Rs {totalAmount.toLocaleString()}</p>
+              <p className="text-sm font-semibold text-slate-800">
+                Rs {totalAmount.toLocaleString()}
+              </p>
             </div>
             <div className="bg-green-50 rounded-lg p-2 text-center">
               <p className="text-xs text-slate-500">Paid</p>
-              <p className="text-sm font-semibold text-green-600">Rs {Number(paidAmount).toLocaleString()}</p>
+              <p className="text-sm font-semibold text-green-600">
+                Rs {Number(paidAmount).toLocaleString()}
+              </p>
             </div>
             <div className="bg-red-50 rounded-lg p-2 text-center">
               <p className="text-xs text-slate-500">Due</p>
@@ -186,6 +256,18 @@ function AddOrderModal({ onAdd, onClose }) {
             </div>
           </div>
         )}
+
+        {/* Notes */}
+        <div className="flex flex-col gap-1.5 mt-3">
+          <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+            Notes (optional)
+          </label>
+          <input type="text" value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Any extra note..."
+            className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+          />
+        </div>
       </div>
 
       {/* Buttons */}
