@@ -55,7 +55,7 @@ function ViewOrderModal({ order, onClose }) {
               <tbody>
                 {(order.items || []).map((item, i) => (
                   <tr key={i} className="border-b border-slate-50 last:border-0">
-                    <td className="px-3 py-2.5 text-slate-800 font-medium">{item.product}</td>
+                    <td className="px-3 py-2.5 text-slate-800 font-medium">{item.name}</td>
                     <td className="px-3 py-2.5 text-center text-slate-500">{item.qty}</td>
                     <td className="px-3 py-2.5 text-right text-slate-500">Rs {Number(item.price).toLocaleString()}</td>
                     <td className="px-3 py-2.5 text-right text-slate-800 font-medium">

@@ -86,16 +86,24 @@ const createOrder = async (req, res) => {
       await product.save();
     }
 
+    
     // create order
-    const order = await Order.create({
-      user:        req.user._id,
-      customer:    customerId,
-      items:       orderItems,
-      totalAmount,
-      paidAmount:  paidAmount || 0,
-      dueDate:     dueDate    || null,
-      notes:       notes      || "",
-    });
+ const order = await Order.create({
+  user:        req.user._id,
+  customer:    customerId,
+  items:       orderItems,
+  totalAmount,
+  paidAmount:  paidAmount || 0,
+  dueDate:     dueDate    || null,
+  notes:       notes      || "",
+  // ✅ save first payment in history if paid on creation
+  paymentHistory: paidAmount > 0 ? [{
+    amount: paidAmount,
+    date:   new Date(),
+    note:   "Initial payment",
+  }] : [],
+});
+
 
     // ✅ update customer totals and status
     customer.totalOrders += 1;
@@ -112,7 +120,8 @@ const createOrder = async (req, res) => {
   }
 };
 
-// PATCH — update payment only
+
+// PATCH — add partial payment
 const updatePayment = async (req, res) => {
   try {
     const order = await Order.findOne({ _id: req.params.id, user: req.user._id });
@@ -121,26 +130,53 @@ const updatePayment = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    const oldPaid    = order.paidAmount;
-    const newPaid    = Number(req.body.paidAmount);
-    const difference = newPaid - oldPaid;
+    const { amount, note } = req.body;
 
-    order.paidAmount = newPaid;
-    const updated    = await order.save();
+    // validate
+    if (!amount || Number(amount) <= 0) {
+      return res.status(400).json({ message: "Please enter a valid payment amount" });
+    }
+
+    const payAmount = Number(amount);
+
+    // check overpayment
+    if (order.paidAmount + payAmount > order.totalAmount) {
+      return res.status(400).json({
+        message: `Payment exceeds remaining due amount of Rs ${order.dueAmount}`
+      });
+    }
+
+    // ✅ add to paid amount
+    order.paidAmount += payAmount;
+
+    // ✅ push to payment history
+    order.paymentHistory.push({
+      amount: payAmount,
+      date:   new Date(),
+      note:   note || "",
+    });
+
+    const updated = await order.save();
 
     // ✅ update customer paid amount
-    const customer       = await Customer.findById(order.customer);
+    const Customer = require("../models/Customer");
+    const customer = await Customer.findById(order.customer);
     if (customer) {
-      customer.paidAmount += difference;
+      customer.paidAmount += payAmount;
       await customer.save();
     }
 
-    const populated = await Order.findById(updated._id).populate("customer", "name phone");
+    const populated = await Order
+      .findById(updated._id)
+      .populate("customer", "name phone");
+
     res.status(200).json(populated);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // DELETE — delete order + restore stock
 const deleteOrder = async (req, res) => {

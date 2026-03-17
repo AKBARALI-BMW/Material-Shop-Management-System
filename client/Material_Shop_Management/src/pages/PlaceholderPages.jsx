@@ -18,5 +18,3 @@ function ComingSoon({ title, subtitle }) {
   );
 }
 
-
-export function Reports()   { return <ComingSoon title="Reports"   subtitle="Sales analytics and reports." />; }

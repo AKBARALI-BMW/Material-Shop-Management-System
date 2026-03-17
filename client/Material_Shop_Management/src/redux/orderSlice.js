@@ -31,12 +31,12 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-// PATCH — update payment
-export const updatePayment = createAsyncThunk(
+
+ export const updatePayment = createAsyncThunk(
   "orders/updatePayment",
-  async ({ id, paidAmount }, thunkAPI) => {
+  async ({ id, amount, note }, thunkAPI) => {
     try {
-      const res = await API.patch(`/orders/${id}/pay`, { paidAmount });
+      const res = await API.patch(`/orders/${id}/pay`, { amount, note });
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

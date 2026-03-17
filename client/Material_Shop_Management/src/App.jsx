@@ -3,12 +3,13 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
-import { Reports, } from "./pages/PlaceholderPages";
+
 import PrivateRoute from "./components/PrivateRoute";
 import Settings from "./pages/Settings"; 
 import Products from "./pages/Products";
 import Inventory from "./pages/Inventory";
 import Orders from "./pages/Orders";
+import Reports from "./pages/Reports";
 
 
 
