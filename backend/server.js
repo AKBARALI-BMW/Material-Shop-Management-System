@@ -12,6 +12,7 @@ const customerRoutes = require("./routes/customerRoutes");
 const inventoryRoutes = require("./routes/inventoryRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const reportRoutes = require("./routes/reportRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 
 
@@ -40,6 +41,8 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reports", reportRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 
 app.get("/", (req, res) => {
