@@ -5,7 +5,9 @@ import productReducer  from "./productSlice";
 import customerReducer from "./customerSlice"; 
 import inventoryReducer from "./inventorySlice"; 
 import orderReducer     from "./orderSlice"; 
-import reportReducer    from "./reportSlice";     
+import reportReducer    from "./reportSlice"; 
+import dashboardReducer      from "./dashboardSlice"; 
+
 
 
 
@@ -19,7 +21,8 @@ export const store = configureStore({
          inventory: inventoryReducer, 
          orders:    orderReducer,
          reports:   reportReducer,
-         
+         dashboard: dashboardReducer,
+
 
 
     },
