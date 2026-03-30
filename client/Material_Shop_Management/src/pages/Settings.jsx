@@ -63,37 +63,36 @@ function Settings() {
   return (
     <Layout>
       <div className="mb-5">
-        <h2 className="text-base font-semibold text-slate-800">Settings</h2>
-        <p className="text-sm text-slate-500 mt-0.5">
+        <p className="font-mono text-sm text-slate-500 mt-0.5">
           Manage your profile and shop information.
         </p>
       </div>
 
       {loading && (
-        <div className="text-sm text-slate-500 mb-4">Loading settings...</div>
+        <div className="text-sm text-slate-500 mb-4 font-mono">Loading settings...</div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5 w-full">
 
       
         {/* Shop Information */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-slate-800 ">Shop Information</h3>
+        <div className="font-mono bg-white border border-slate-200 rounded-xl p-5">
+          <h3 className=" text-sm font-mono text-slate-800 ">Shop Information</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
               {/* Shop Logo */}
 <div className="p-2">
-  <h3 className="text-sm font-semibold text-slate-800 mb-4">Shop Logo</h3>
+  <h3 className="text-sm font-mono text-slate-800 mb-4">Shop Logo</h3>
   <div className="flex items-center gap-3">
     
     {/* Clickable logo preview box */}
     <div
       onClick={() => logoInputRef.current.click()}
-      className="w-30 h-15 rounded-xl border-2 border-dashed border-slate-300 hover:border-indigo-400 bg-slate-50 hover:bg-indigo-50 flex items-center justify-center cursor-pointer transition overflow-hidden flex-shrink-0"
+      className="w-30 h-15 rounded-xl border-2 border-dashed border-slate-300 hover:border-orange-400 bg-slate-50 hover:bg-orange-50 flex items-center justify-center cursor-pointer transition overflow-hidden flex-shrink-0"
     >
       {logoImage ? (
-        <img src={logoImage} alt="logo" className="w-full h-full object-contain p-1" />
+        <img src={logoImage} alt="logo" className=" w-full h-full object-contain p-1" />
       ) : (
         <svg className="w-6 h-6 text-slate-400" viewBox="0 0 16 16" fill="none">
           <path d="M2 6.5L3 2h10l1 4.5v.5a2.5 2.5 0 01-5 0 2.5 2.5 0 01-5 0v-.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
@@ -107,7 +106,7 @@ function Settings() {
       <button
         type="button"
         onClick={() => logoInputRef.current.click()}
-        className="mt-1 text-xs text-indigo-600 border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition w-fit"
+        className="mt-1 text-xs text-orange-600 border border-orange-200 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition w-fit"
       >
         Upload Logo
       </button>
@@ -128,35 +127,35 @@ function Settings() {
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Owner Name</label>
               <input type="text" name="ownerName" value={formData.ownerName} onChange={handleChange}
                 placeholder="e.g. Akbar Khan"
-                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition" />
+                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition" />
             </div>
 
             <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Shop Name</label>
               <input type="text" name="shopName" value={formData.shopName} onChange={handleChange}
                 placeholder="e.g. Akbar Hardware Store"
-                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition" />
+                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition" />
             </div>
 
             <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Shop Address</label>
               <input type="text" name="shopAddress" value={formData.shopAddress} onChange={handleChange}
                 placeholder="e.g. Main Bazar, Near Masjid"
-                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition" />
+                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition" />
             </div>
 
             <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">City</label>
               <input type="text" name="city" value={formData.city} onChange={handleChange}
                 placeholder="e.g. Mardan"
-                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition" />
+                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition" />
             </div>
 
             <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Country</label>
               <input type="text" name="country" value={formData.country} onChange={handleChange}
                 placeholder="e.g. Pakistan"
-                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition" />
+                className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition" />
             </div>
 
             <div>
@@ -170,7 +169,7 @@ function Settings() {
                 </span>
                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange}
                   placeholder="03001234567"
-                  className="w-full h-10 pl-9 pr-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition" />
+                  className="w-full h-10 pl-9 pr-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition" />
               </div>
             </div>
 
@@ -220,7 +219,7 @@ function Settings() {
           <button
             type="submit"
             disabled={saving}
-            className="ml-auto h-10 px-8 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-150 flex items-center gap-2"
+            className="ml-auto h-10 px-8 bg-orange-400 hover:bg-orange-500 font-mono active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm  rounded-lg transition-all duration-150 flex items-center gap-2"
           >
             {saving ? (
               <>

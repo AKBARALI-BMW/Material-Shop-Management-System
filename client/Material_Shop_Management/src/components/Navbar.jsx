@@ -101,19 +101,19 @@ function Navbar({ user, onMenuClick }) {
   };
 
   return (
-    <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0">
+    <div className="h-18 bg-gradient-[#141E30]  flex items-center justify-between px-4 md:px-6 flex-shrink-0">
 
       {/* Left — Hamburger + Page Title */}
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 transition"
+          className="lg:hidden p-1.5 rounded-lg text-orange-400 hover:bg-orange-100 transition"
         >
           <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
             <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
         </button>
-        <h1 className="text-sm font-semibold text-slate-800">{title}</h1>
+        <h1 className="text-sm font-mono  text-orange-400  ms-6 ">{title}</h1>
       </div>
 
       {/* Right — Bell + Shop + Avatar */}
@@ -123,7 +123,7 @@ function Navbar({ user, onMenuClick }) {
         <div className="relative" ref={dropRef}>
           <button
             onClick={handleOpen}
-            className="relative p-2 rounded-lg text-slate-500 hover:bg-slate-100 transition"
+            className="relative p-2 rounded-lg text-orange-400 hover:bg-orange-100 transition"
           >
             <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
               <path d="M10 2a6 6 0 00-6 6v3l-1.5 2.5h15L16 11V8a6 6 0 00-6-6z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
@@ -131,7 +131,7 @@ function Navbar({ user, onMenuClick }) {
             </svg>
             {/* Unread badge */}
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
@@ -139,12 +139,12 @@ function Navbar({ user, onMenuClick }) {
 
           {/* Dropdown */}
           {open && (
-            <div className="absolute right-0 top-11 w-80 bg-white border border-slate-200 rounded-2xl shadow-lg z-50 overflow-hidden">
+            <div className="absolute right-0 top-11 w-80 bg-white  rounded-2xl shadow-lg z-50 overflow-hidden">
 
               {/* Header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+              <div className="flex items-center justify-between px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-slate-800">Notifications</span>
+                  <span className="text-sm font-semibold text-white">Notifications</span>
                   {unreadCount > 0 && (
                     <span className="text-xs bg-red-100 text-red-600 font-medium px-1.5 py-0.5 rounded-full">
                       {unreadCount} new
@@ -154,7 +154,7 @@ function Navbar({ user, onMenuClick }) {
                 {unreadCount > 0 && (
                   <button
                     onClick={handleMarkAllRead}
-                    className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition"
+                    className="text-xs text-orange-600 hover:text-orange-700 font-medium transition"
                   >
                     Mark all read
                   </button>
@@ -243,18 +243,18 @@ function Navbar({ user, onMenuClick }) {
         </div>
 
         {/* Divider */}
-        <div className="hidden sm:block w-px h-6 bg-slate-200" />
+        <div className="hidden sm:block w-px h-6" />
 
         {/* Shop name + owner */}
         <div className="hidden sm:flex flex-col items-end">
-          <span className="text-xs font-medium text-slate-700 leading-tight">{shopName}</span>
+          <span className="text-xs font-mono text-orange-400 leading-tight">{shopName}</span>
           {ownerName && (
-            <span className="text-xs text-slate-400 leading-tight">{ownerName}</span>
+            <span className="text-xs text-orange-400 font-mono leading-tight">{ownerName}</span>
           )}
         </div>
 
         {/* Avatar */}
-        <div className="w-8 h-8 rounded-full bg-indigo-100 border border-slate-200 overflow-hidden flex items-center justify-center flex-shrink-0">
+        <div className="w-8 h-8 rounded-full bg-orange-100 border border-orange-200 overflow-hidden flex items-center justify-center flex-shrink-0">
           {profileImage ? (
             <img src={profileImage} alt={ownerName} className="w-full h-full object-cover" />
           ) : (

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import ShopLogo from '../assets/ShopLogo.png';
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,25 +31,20 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         {/* Brand */}
         <div className="flex items-center gap-3 mb-8 justify-center">
-          <div className="w-9 h-9 rounded-lg bg-indigo-700 flex items-center justify-center">
-            <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5">
-              <path d="M10 2L3 6v8l7 4 7-4V6L10 2z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-              <path d="M10 2v12M3 6l7 4 7-4" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <span className="text-lg font-semibold text-slate-800">
-            Shop<span className="text-indigo-600">Flow</span>
-          </span>
+          <div className="w-30 h-8 rounded-lg  flex items-center justify-center">
+         
+            <img src={ShopLogo} alt="Brand" className="w-35 h-30 object-cover rounded-full" />
+               </div>
         </div>
 
         {/* Card */}
         <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-800 mb-1">Welcome back</h2>
+          <h2 className="text-xl font-plus-jakarta text-slate-800 mb-1  font-serif"><span className="text-amber-500 font-serif">Welcome</span>  back</h2>
           <p className="text-sm text-slate-500 mb-6">Sign in to your account to continue</p>
 
           {/* Error alert */}
@@ -79,7 +75,7 @@ function Login() {
                   name="email"
                   placeholder="you@example.com"
                   onChange={handleChange}
-                  className="w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                  className="w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition"
                 />
               </div>
             </div>
@@ -88,7 +84,7 @@ function Login() {
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">Password</label>
-                <a href="/forgot-password" className="text-xs text-indigo-600 font-medium hover:underline">
+                <a href="/forgot-password" className="text-xs text-amber-500 font-serif hover:underline">
                   Forgot password?
                 </a>
               </div>
@@ -105,7 +101,7 @@ function Login() {
                   name="password"
                   placeholder="Enter your password"
                   onChange={handleChange}
-                  className="w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                  className="w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2  focus:ring-amber-100 transition"
                 />
               </div>
             </div>
@@ -113,7 +109,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 mt-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm rounded-lg transition-all duration-150"
+              className="w-full h-11 mt-2 bg-amber-500 hover:bg-amber-600 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-white font-serif text-sm rounded-lg transition-all duration-150"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -128,7 +124,7 @@ function Login() {
 
           <p className="text-center text-sm text-slate-500 mt-5">
             Don't have an account?{" "}
-            <Link to="/register" className="text-indigo-600 font-medium hover:underline">
+            <Link to="/register" className="text-amber-600 font-medium font-serif hover:underline">
             Create one
             </Link>
              </p>

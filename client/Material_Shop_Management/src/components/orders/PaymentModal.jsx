@@ -41,7 +41,7 @@ function PaymentModal({ order, onClose }) {
             <h3 className="text-sm font-semibold text-slate-800">Update Payment</h3>
             <p className="text-xs text-slate-400 mt-0.5">
               Order{" "}
-              <span className="font-mono font-semibold text-indigo-600">{order.orderNumber}</span>
+              <span className="font-mono font-semibold text-orange-400">{order.orderNumber}</span>
               {" "}— {order.customer?.name}
             </p>
           </div>
@@ -136,7 +136,7 @@ function PaymentModal({ order, onClose }) {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="e.g. 2000"
-                  className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                  className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -148,7 +148,7 @@ function PaymentModal({ order, onClose }) {
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   placeholder="e.g. Cash payment"
-                  className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+                  className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
                 />
               </div>
             </div>
@@ -167,7 +167,7 @@ function PaymentModal({ order, onClose }) {
         <div className="flex gap-2">
           {due > 0 && (
             <button onClick={handleSubmit} disabled={loading}
-              className="flex-1 h-10 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition flex items-center justify-center gap-2">
+              className="flex-1 h-10 bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition flex items-center justify-center gap-2">
               {loading ? (
                 <>
                   <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">

@@ -57,23 +57,22 @@ function Reports() {
     <Layout>
 
       {/* Header */}
-      <div className="mb-5">
-        <h2 className="text-base font-semibold text-slate-800">Reports</h2>
+      <div className="mb-5 font-mono">
         <p className="text-sm text-slate-500 mt-0.5">
           View sales, products, customers and stock reports.
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 mb-5">
+      <div className="font-mono flex items-center gap-1.5 overflow-x-auto pb-1 mb-5">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 h-9 px-4 text-xs font-medium rounded-lg border transition-all whitespace-nowrap flex-shrink-0
               ${activeTab === tab.id
-                ? "bg-indigo-600 text-white border-indigo-600"
-                : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                ? "bg-orange text-white border-orange-600"
+                : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:text-orange-600"
               }`}
           >
             <span className={activeTab === tab.id ? "text-white" : "text-slate-400"}>

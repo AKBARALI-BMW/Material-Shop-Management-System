@@ -19,7 +19,7 @@ function Layout({ children }) {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-r from-[#141E30] to-[#243B55] overflow-hidden">
 
       {/* Mobile overlay */}
       {sidebarOpen && (

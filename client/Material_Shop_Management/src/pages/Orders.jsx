@@ -67,12 +67,12 @@ function Orders() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div>
-          <h2 className="text-base font-semibold text-slate-800">Orders</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Manage all shop orders and payments.</p>
+         
+          <p className="text-sm text-slate-500 mt-0.5 font-mono">Manage all shop orders and payments.</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition active:scale-[0.99] self-start sm:self-auto"
+          className="flex items-center gap-2 h-9 px-4 bg-orange-400 hover:bg-orange-500 text-white text-sm font-mono rounded-lg transition active:scale-[0.99] self-start sm:self-auto"
         >
           <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
             <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
@@ -82,7 +82,7 @@ function Orders() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 font-mono">
         {[
           { label: "Total Orders", value: safeOrders.length,                                    color: "text-slate-800" },
           { label: "Paid",         value: safeOrders.filter(o => o.status === "Paid").length,   color: "text-green-600" },
@@ -97,7 +97,7 @@ function Orders() {
       </div>
 
       {/* Search + Filter */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row gap-3 mb-5 font-mono">
         <div className="relative flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
             <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
@@ -107,7 +107,7 @@ function Orders() {
           </span>
           <input type="text" placeholder="Search by order no or customer..."
             value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+            className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
           />
         </div>
         <div className="flex items-center gap-1.5">
@@ -115,8 +115,8 @@ function Orders() {
             <button key={s} onClick={() => setStatusFilter(s)}
               className={`h-9 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap
                 ${statusFilter === s
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                  ? "bg-orange-400 text-white border-orange-600"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:text-orange-600"
                 }`}>
               {s}
             </button>

@@ -100,12 +100,12 @@ function Customers() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div>
-          <h2 className="text-base font-semibold text-slate-800">Customers</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Manage your shop customers and payments.</p>
+        
+          <p className="text-sm text-slate-500 mt-0.5 font-mono">Manage your shop customers and payments.</p>
         </div>
         <button
           onClick={() => { setForm(emptyForm); setShowAddModal(true); }}
-          className="flex items-center gap-2 h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition active:scale-[0.99] self-start sm:self-auto"
+          className="flex items-center gap-2 h-9 px-4 bg-orange-500 hover:bg-orange-600 text-white text-sm font-mono rounded-lg transition active:scale-[0.99] self-start sm:self-auto"
         >
           <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
             <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
@@ -130,7 +130,7 @@ function Customers() {
       </div>
 
       {/* Search + Filter */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row gap-3 mb-5 font-mono">
         <div className="relative flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
             <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
@@ -151,7 +151,7 @@ function Customers() {
             <button key={s} onClick={() => setStatusFilter(s)}
               className={`h-9 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap
                 ${statusFilter === s
-                  ? "bg-indigo-600 text-white border-indigo-600"
+                  ? "bg-orange-400 text-white border-orange-600"
                   : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
                 }`}>
               {s}
@@ -182,8 +182,8 @@ function Customers() {
       {/* Add Modal */}
       {showAddModal && (
         <Modal title="Add New Customer" onClose={() => setShowAddModal(false)}>
-          <div className="space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-3 font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
               <Field label="Full Name" name="name" value={form.name}
                 onChange={handleFormChange} placeholder="e.g. Ali Khan" required />
               <Field label="Phone Number" name="phone" value={form.phone}
@@ -196,9 +196,9 @@ function Customers() {
             <Field label="City (optional)" name="city" value={form.city}
               onChange={handleFormChange} placeholder="e.g. Mardan" />
           </div>
-          <div className="flex gap-2 mt-5">
+          <div className="flex gap-2 mt-5 font-mono">
             <button onClick={handleAdd}
-              className="flex-1 h-10 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition">
+              className="flex-1 h-10 bg-orange-400 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition">
               Add Customer
             </button>
             <button onClick={() => setShowAddModal(false)}

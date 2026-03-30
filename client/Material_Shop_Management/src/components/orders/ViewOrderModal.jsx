@@ -15,7 +15,7 @@ function ViewOrderModal({ order, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-mono font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">
+            <span className="text-sm font-mono font-bold text-orange-400 bg-orange-50 px-2.5 py-1 rounded-lg">
               {order.orderNumber}
             </span>
             <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusBadge[order.status] || statusBadge["Pending"]}`}>

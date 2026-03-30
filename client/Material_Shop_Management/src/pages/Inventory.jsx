@@ -49,15 +49,14 @@ const stockFilters = ["All", "In Stock", "Low Stock", "Out Stock"];
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <div>
-          <h2 className="text-base font-semibold text-slate-800">Inventory</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Track stock levels and product availability.</p>
+          <p className="font-mono text-sm text-slate-500 mt-0.5">Track stock levels and product availability.</p>
         </div>
       </div>
 
 
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div className="font-serif grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
         {[
           { label: "Total Products", value: safeInventory.length, color: "text-slate-800" },
           { label: "In Stock",       value: inStock,              color: "text-green-600" },
@@ -115,7 +114,7 @@ const stockFilters = ["All", "In Stock", "Low Stock", "Out Stock"];
       )}
 
       {/* Search + Filters */}
-      <div className="flex flex-col gap-3 mb-5">
+      <div className="font-mono flex flex-col gap-3 mb-5">
 
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
@@ -126,7 +125,7 @@ const stockFilters = ["All", "In Stock", "Low Stock", "Out Stock"];
           </span>
           <input type="text" placeholder="Search by product name or category..."
             value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+            className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
           />
         </div>
 
@@ -136,8 +135,8 @@ const stockFilters = ["All", "In Stock", "Low Stock", "Out Stock"];
               <button key={cat} onClick={() => setCategoryFilter(cat)}
                 className={`h-8 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap flex-shrink-0
                   ${categoryFilter === cat
-                    ? "bg-indigo-600 text-white border-indigo-600"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
+                    ? "bg-orange-400 text-white border-orange-600"
+                    : "bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:text-orange-600"
                   }`}>
                 {cat}
               </button>
@@ -148,8 +147,8 @@ const stockFilters = ["All", "In Stock", "Low Stock", "Out Stock"];
               <button key={s} onClick={() => setStockFilter(s)}
                 className={`h-8 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap
                   ${stockFilter === s
-                    ? "bg-slate-800 text-white border-slate-800"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
+                    ? "bg-orange-400 text-white border-slate-800"
+                    : "bg-white text-slate-600 border-orange-200 hover:border-orange-400"
                   }`}>
                 {s}
               </button>

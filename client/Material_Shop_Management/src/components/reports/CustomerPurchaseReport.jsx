@@ -68,7 +68,7 @@ function CustomerPurchaseReport() {
         </span>
         <input type="text" placeholder="Search customer by name or phone..."
           value={search} onChange={(e) => { setSearch(e.target.value); handleBack(); }}
-          className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+          className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
         />
       </div>
 
@@ -89,12 +89,12 @@ function CustomerPurchaseReport() {
               <table className="w-full text-sm min-w-[520px]">
                 <thead>
                   <tr className="border-b border-slate-100">
-                    <th className="text-left text-xs text-slate-500 font-medium pb-2 pr-4">Customer</th>
-                    <th className="text-left text-xs text-slate-500 font-medium pb-2 pr-4">Phone</th>
-                    <th className="text-left text-xs text-slate-500 font-medium pb-2 pr-4">Orders</th>
-                    <th className="text-left text-xs text-slate-500 font-medium pb-2 pr-4">Total Spent</th>
-                    <th className="text-left text-xs text-slate-500 font-medium pb-2 pr-4">Total Due</th>
-                    <th className="text-left text-xs text-slate-500 font-medium pb-2">Action</th>
+                    <th className="text-left text-xs text-slate-500 font-mono  pb-2 pr-4">Customer</th>
+                    <th className="text-left text-xs text-slate-500 font-mono  pb-2 pr-4">Phone</th>
+                    <th className="text-left text-xs text-slate-500 font-mono  pb-2 pr-4">Orders</th>
+                    <th className="text-left text-xs text-slate-500 font-mono pb-2 pr-4">Total Spent</th>
+                    <th className="text-left text-xs text-slate-500 font-mono  pb-2 pr-4">Total Due</th>
+                    <th className="text-left text-xs text-slate-500 font-mono  pb-2">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@ function CustomerPurchaseReport() {
                           </td>
                           <td className="py-3">
                             <button onClick={() => handleViewOrders(c._id)}
-                              className="flex items-center gap-1 h-7 px-2.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition whitespace-nowrap">
+                              className="flex items-center gap-1 h-7 px-2.5 text-xs font-medium text-orange-600 bg-indigo-50 hover:bg-orange-100 rounded-lg transition whitespace-nowrap">
                               <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none">
                                 <ellipse cx="8" cy="8" rx="7" ry="4.5" stroke="currentColor" strokeWidth="1.3"/>
                                 <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.3"/>
@@ -145,7 +145,7 @@ function CustomerPurchaseReport() {
       {selectedId && (
         <div className="space-y-4">
           <button onClick={handleBack}
-            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-indigo-600 font-medium transition">
+            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-orange-600 font-medium transition">
             <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none">
               <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -212,7 +212,7 @@ function CustomerPurchaseReport() {
                         customerOrders.map((o) => (
                           <tr key={o._id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition">
                             <td className="py-3 pr-4">
-                              <span className="text-xs font-mono font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                              <span className="text-xs font-mono font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md">
                                 {o.orderNumber}
                               </span>
                             </td>

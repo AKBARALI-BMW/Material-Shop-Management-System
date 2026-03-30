@@ -36,7 +36,7 @@ function Field({ label, ...props }) {
       <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</label>
       <input
         {...props}
-        className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+        className="w-full h-10 px-3 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
       />
     </div>
   );
@@ -103,14 +103,14 @@ function Products() {
     <Layout>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 font-mono">
         <div>
-          <h2 className="text-base font-semibold text-slate-800">Products</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Manage your construction materials.</p>
+      
+          <p className="text-sm text-slate-500 mt-0.5 font-mono">Manage your construction materials.</p>
         </div>
         <button
           onClick={() => { setForm(emptyForm); setShowAddModal(true); }}
-          className="flex items-center gap-2 h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition active:scale-[0.99] self-start sm:self-auto"
+          className="flex items-center gap-2 h-9 px-4 bg-orange-400 hover:bg-orange-500 text-white text-sm font-medium rounded-lg transition active:scale-[0.99] self-start sm:self-auto"
         >
           <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
             <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
@@ -121,7 +121,7 @@ function Products() {
 
       {/* Search + Category Filter */}
     
-      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+      <div className="flex flex-col sm:flex-row gap-3 mb-5 font-mono">
       
         <div className="relative flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
@@ -132,7 +132,7 @@ function Products() {
           </span>
           <input type="text" placeholder="Search products..." value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
+            className="w-full h-9 pl-9 pr-4 text-sm bg-white border border-orange-200 rounded-lg text-slate-800 placeholder-orange-400 focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-indigo-100 transition"
           />
         </div>
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap">
@@ -140,8 +140,8 @@ function Products() {
             <button key={cat} onClick={() => setActiveCategory(cat)}
               className={`h-9 px-3 text-xs font-medium rounded-lg border transition-all whitespace-nowrap 
                 ${activeCategory === cat
-                  ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"  }`} > {cat}
+                  ? "bg-orange-400 text-white border-orange-500"
+                  : "bg-white text-orange-600 border-slate-200 hover:border-orange-300 hover:text-orange-600"  }`} > {cat}
             </button>
           ))}
         </div>
@@ -179,25 +179,25 @@ function Products() {
       {/* Add Modal */}
       {showAddModal && (
         <Modal title="Add New Product" onClose={() => setShowAddModal(false)}>
-          <div className="space-y-3">
+          <div className="space-y-3 font-mono">
             <Field label="Product Name" name="name" value={form.name}
               onChange={handleFormChange} placeholder="e.g. Cement OPC" />
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 font-mono">
               <SelectField label="Category" name="category" value={form.category}
                 onChange={handleFormChange} options={categories.slice(1)} />
               <Field label="Unit" name="unit" value={form.unit}
                 onChange={handleFormChange} placeholder="e.g. Bag, Piece" />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 font-mono">
               <Field label="Price (Rs)" name="price" type="number" value={form.price}
                 onChange={handleFormChange} placeholder="1200" />
               <Field label="Stock Qty" name="stock" type="number" value={form.stock}
                 onChange={handleFormChange} placeholder="100" />
             </div>
           </div>
-          <div className="flex gap-2 mt-5">
-            <button onClick={handleAdd} className="flex-1 h-10 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition">Add Product</button>
-            <button onClick={() => setShowAddModal(false)} className="flex-1 h-10 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition">Cancel</button>
+          <div className="flex gap-2 mt-5 font-mono">
+            <button onClick={handleAdd} className="flex-1 h-10 bg-orange-400 hover:bg-orange-500 text-white text-sm font-mono rounded-lg transition">Add Product</button>
+            <button onClick={() => setShowAddModal(false)} className="flex-1 h-10 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-mono rounded-lg transition">Cancel</button>
           </div>
         </Modal>
       )}
