@@ -1,3 +1,5 @@
+import ShopLogo from "../../assets/InvoiceLogo (2).jpg";
+
 function InvoiceSlip({ data, onClose }) {
   const { shop, order } = data;
 
@@ -40,14 +42,15 @@ function InvoiceSlip({ data, onClose }) {
                 <img
                   src={shop.logoImage}
                   alt="Shop Logo"
-                  className="w-14 h-14 object-contain rounded-lg border border-slate-200"
+                  className="w-18 h-14 object-contain rounded-lg border border-slate-200"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-lg bg-indigo-100 flex items-center justify-center border border-indigo-200">
-                  <svg className="w-7 h-7 text-indigo-600" viewBox="0 0 20 20" fill="none">
+                <div className="w-25 h-12 rounded-lg  flex items-center justify-center ">
+                  {/* <svg className="w-7 h-7 text-indigo-600" viewBox="0 0 20 20" fill="none">
                     <path d="M2 6.5L3 2h14l1 4.5v.5a3 3 0 01-6 0 3 3 0 01-6 0v-.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
                     <path d="M2 17V9.5A3 3 0 005 10a3 3 0 003-1.5A3 3 0 0011 10a3 3 0 003-1.5A3 3 0 0017 10V17H2z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
-                  </svg>
+                  </svg> */}
+                  <img src={ShopLogo} className="w-28 h-20 object-cover rounded-full"  alt="Shop Logo" />
                 </div>
               )}
             </div>

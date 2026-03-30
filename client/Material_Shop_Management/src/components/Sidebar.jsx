@@ -87,10 +87,10 @@ function Sidebar({ onLogout, onClose }) {
     <div className="w-56 h-full  bg-gradient-to-r from-[#141E30]  flex flex-col">
 
       {/* Brand + Close button (close only shows on mobile) */}
-      <div className="flex items-center justify-between px-10 py-8 ">
+      <div className="flex items-center justify-between px-4 py-8 ">
         <div className="flex items-center gap-2.5">
          <div className="w-30 h-8 rounded-lg  flex items-center justify-center">
-             <img src={ShopLogo} alt="Brand" className="w-35 h-30 object-cover rounded-full" />
+             <img src={ShopLogo} alt="Brand" className="w-29 h-25 object-cover rounded-4xl" />
                 </div>
         </div>
 

@@ -36,9 +36,9 @@ function Login() {
 
         {/* Brand */}
         <div className="flex items-center gap-3 mb-8 justify-center">
-          <div className="w-30 h-8 rounded-lg  flex items-center justify-center">
+          <div className="w-35 h-10 rounded-lg  flex items-center justify-center">
          
-            <img src={ShopLogo} alt="Brand" className="w-35 h-30 object-cover rounded-full" />
+            <img src={ShopLogo} alt="Brand" className="w-29 h-25 object-cover rounded-full" />
                </div>
         </div>
 
