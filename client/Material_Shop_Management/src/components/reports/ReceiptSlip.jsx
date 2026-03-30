@@ -70,7 +70,7 @@ function ReceiptSlip({ data, onClose }) {
               </svg>
               <span className="text-slate-500">{shop?.phone || ""}</span>
               {customer?.phone && (
-                <span className="text-slate-500 ml-auto">{customer.phone}</span>
+                <span className="text-slate-500 ">{customer.phone}</span>
               )}
             </div>
             <div className="flex items-center gap-2">
