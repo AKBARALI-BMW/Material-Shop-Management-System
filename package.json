@@ -1,0 +1,13 @@
+{
+  "name": "shop-management-system",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "client/Material_Shop_Management"
+  ],
+  "scripts": {
+    "dev": "cd client/Material_Shop_Management && npm run dev",
+    "build": "cd client/Material_Shop_Management && npm run build",
+    "vercel-build": "npm run build"
+  }
+}
