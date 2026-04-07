@@ -36,12 +36,13 @@ if (password !== confirmPassword) {
     if(user) {
         res.status(201).json({
             _id: user._id,
+            user_id: user._id,
             name: user.name,
             shopName: user.shopName,
             email: user.email,
             mobile: user.mobile,
-           createdAt: user.createdAt,
-          token: generateToken(user._id, user.email)
+            createdAt: user.createdAt,
+            message: "Account created successfully. Please login to continue."
         });
     } else {
         res.status(400).json({message:"Invalid user data"});
@@ -89,6 +90,7 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({
         _id: user._id,
+        user_id: user._id,
         name: user.name,
         shopName: user.shopName,
         email: user.email,

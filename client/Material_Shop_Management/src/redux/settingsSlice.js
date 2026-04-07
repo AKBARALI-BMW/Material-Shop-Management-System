@@ -19,9 +19,25 @@ export const fetchSettings = createAsyncThunk(
 // POST settings — save to backend
 export const saveSettings = createAsyncThunk(
   "settings/saveSettings",
-  async (formData, thunkAPI) => {
+  async ({ formData, logoFile }, thunkAPI) => {
     try {
-      const res = await API.post("/settings", formData);
+      const data = new FormData();
+
+      // Add form fields
+      Object.keys(formData).forEach(key => {
+        data.append(key, formData[key]);
+      });
+
+      // Add logo file if provided
+      if (logoFile) {
+        data.append('logo', logoFile);
+      }
+
+      const res = await API.post("/settings", data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

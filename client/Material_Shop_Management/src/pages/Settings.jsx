@@ -9,6 +9,7 @@ function Settings() {
 
   const logoInputRef = useRef(null);
   const [logoImage, setLogoImage] = useState(null);
+  const [logoFile, setLogoFile] = useState(null);
 
   const [formData, setFormData] = useState({
     ownerName:   "",
@@ -35,6 +36,11 @@ function Settings() {
         phone:       data.phone       || "",
         email:       data.email       || "",
       });
+
+      // Set logo image if it exists
+      if (data.profileImage) {
+        setLogoImage(data.profileImage);
+      }
     }
   }, [data]);
 
@@ -52,12 +58,14 @@ function Settings() {
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    setLogoFile(file);
     setLogoImage(URL.createObjectURL(file));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(saveSettings(formData));
+    dispatch(saveSettings({ formData, logoFile }));
   };
 
   return (

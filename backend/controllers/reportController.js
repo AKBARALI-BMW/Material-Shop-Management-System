@@ -119,16 +119,19 @@ const getCustomerReport = async (req, res) => {
 // ── GET Single Customer Orders ─────────────────────────────────────
 const getCustomerOrders = async (req, res) => {
   try {
-    const orders = await Order.find({
-      user:     req.user._id,
-      customer: req.params.customerId,
-    }).sort({ createdAt: -1 });
-
-    const customer = await Customer.findById(req.params.customerId);
+    const customer = await Customer.findOne({
+      _id: req.params.customerId,
+      user: req.user._id,
+    });
 
     if (!customer) {
       return res.status(404).json({ message: "Customer not found" });
     }
+
+    const orders = await Order.find({
+      user:     req.user._id,
+      customer: req.params.customerId,
+    }).sort({ createdAt: -1 });
 
     res.status(200).json({
       customer,

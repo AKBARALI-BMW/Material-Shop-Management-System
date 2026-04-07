@@ -1,6 +1,7 @@
 const Order  = require("../models/Order");
 const Product = require("../models/Product");
 const Customer = require("../models/Customer");
+const Counter = require("../models/Counter");
 
 
 // get all order 
@@ -87,22 +88,32 @@ const createOrder = async (req, res) => {
     }
 
     
+    // generate a unique order number using an atomic counter
+    const counter = await Counter.findByIdAndUpdate(
+      "orderNumber",
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const orderNumber = `ORD-${String(counter.seq).padStart(4, "0")}`;
+
     // create order
- const order = await Order.create({
-  user:        req.user._id,
-  customer:    customerId,
-  items:       orderItems,
-  totalAmount,
-  paidAmount:  paidAmount || 0,
-  dueDate:     dueDate    || null,
-  notes:       notes      || "",
-  // ✅ save first payment in history if paid on creation
-  paymentHistory: paidAmount > 0 ? [{
-    amount: paidAmount,
-    date:   new Date(),
-    note:   "Initial payment",
-  }] : [],
-});
+    const order = await Order.create({
+      user:        req.user._id,
+      customer:    customerId,
+      orderNumber,
+      items:       orderItems,
+      totalAmount,
+      paidAmount:  paidAmount || 0,
+      dueDate:     dueDate    || null,
+      notes:       notes      || "",
+      // ✅ save first payment in history if paid on creation
+      paymentHistory: paidAmount > 0 ? [{
+        amount: paidAmount,
+        date:   new Date(),
+        note:   "Initial payment",
+      }] : [],
+    });
 
 
     // ✅ update customer totals and status
@@ -112,7 +123,7 @@ const createOrder = async (req, res) => {
     await customer.save();
 
     // populate customer before returning
-    const populated = await Order.findById(order._id).populate("customer", "name phone");
+    const populated = await Order.findOne({ _id: order._id, user: req.user._id }).populate("customer", "name phone");
     res.status(201).json(populated);
 
   } catch (error) {
@@ -160,14 +171,14 @@ const updatePayment = async (req, res) => {
 
     // ✅ update customer paid amount
     const Customer = require("../models/Customer");
-    const customer = await Customer.findById(order.customer);
+    const customer = await Customer.findOne({ _id: order.customer, user: req.user._id });
     if (customer) {
       customer.paidAmount += payAmount;
       await customer.save();
     }
 
     const populated = await Order
-      .findById(updated._id)
+      .findOne({ _id: updated._id, user: req.user._id })
       .populate("customer", "name phone");
 
     res.status(200).json(populated);
@@ -189,7 +200,7 @@ const deleteOrder = async (req, res) => {
 
     // ✅ restore stock for each item
     for (const item of order.items) {
-      const product = await Product.findById(item.product);
+      const product = await Product.findOne({ _id: item.product, user: req.user._id });
       if (product) {
         product.stock += item.qty;
         await product.save();
@@ -197,7 +208,7 @@ const deleteOrder = async (req, res) => {
     }
 
     // ✅ update customer totals
-    const customer = await Customer.findById(order.customer);
+    const customer = await Customer.findOne({ _id: order.customer, user: req.user._id });
     if (customer) {
       customer.totalOrders -= 1;
       customer.totalAmount -= order.totalAmount;

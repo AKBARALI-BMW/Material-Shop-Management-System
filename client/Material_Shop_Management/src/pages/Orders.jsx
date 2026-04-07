@@ -61,6 +61,19 @@ function Orders() {
   // ✅ stats
   const totalDue = safeOrders.reduce((s, o) => s + (o.dueAmount || 0), 0);
 
+  // ✅ Get all orders from the same customer
+  const getCustomerOrders = (order) => {
+    const customerId = order.customer?._id;
+    return customerId
+      ? safeOrders.filter((o) => o.customer?._id === customerId)
+      : [order];
+  };
+
+  const handleViewOrder = (order) => {
+    const allCustomerOrders = getCustomerOrders(order);
+    setViewOrder({ order, allCustomerOrders });
+  };
+
   return (
     <Layout>
 
@@ -143,7 +156,7 @@ function Orders() {
       {/* Order List */}
       <OrderList
         filtered={filtered}
-        onView={(order) => setViewOrder(order)}
+        onView={handleViewOrder}
         onDelete={handleDelete}
       />
 
@@ -160,7 +173,8 @@ function Orders() {
       {/* View Order Modal */}
       {viewOrder && (
         <ViewOrderModal
-          order={viewOrder}
+          order={viewOrder.order}
+          allCustomerOrders={viewOrder.allCustomerOrders}
           onClose={() => setViewOrder(null)}
         />
       )}

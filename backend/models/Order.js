@@ -33,14 +33,8 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Auto generate order number and calculate status
-orderSchema.pre("save", async function () {
-  if (this.isNew) {
-    const count      = await mongoose.model("Order").countDocuments();
-    this.orderNumber = `ORD-${String(count + 1).padStart(4, "0")}`;
-  }
-
-  // auto calculate due and status
+// Auto calculate due and status
+orderSchema.pre("save", function () {
   this.dueAmount = this.totalAmount - this.paidAmount;
 
   if (this.dueAmount <= 0)       this.status = "Paid";

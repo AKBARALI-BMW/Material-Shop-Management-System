@@ -9,8 +9,13 @@ const userSchema = new mongoose.Schema(
   mobile: { type: String, required: true },
   password: { type: String, required: true }
 },
-{ timestamps: true }
+{ timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+// expose a stable user_id field for API responses
+userSchema.virtual("user_id").get(function () {
+  return this._id.toString();
+});
 
 // Encrypt password before saving
 userSchema.pre("save", async function() {

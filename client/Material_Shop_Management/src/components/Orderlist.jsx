@@ -16,6 +16,23 @@ function OrderList({ filtered, onView, onDelete }) {
     ? filtered.filter((o) => o && (o._id || o.id))
     : [];
 
+  // Group orders by customer
+  const groupedByCustomer = safeFiltered.reduce((groups, order) => {
+    const customerId = order.customer?._id || "unknown";
+    const customerName = order.customer?.name || "Unknown Customer";
+    if (!groups[customerId]) {
+      groups[customerId] = { name: customerName, orders: [] };
+    }
+    groups[customerId].orders.push(order);
+    return groups;
+  }, {});
+
+  const customerGroups = Object.entries(groupedByCustomer).map(([id, data]) => ({
+    id,
+    name: data.name,
+    orders: data.orders,
+  }));
+
   const handleDeleteConfirm = () => {
     if (!deleteModal) return;
     onDelete(deleteModal._id || deleteModal.id);
@@ -56,10 +73,24 @@ function OrderList({ filtered, onView, onDelete }) {
                   </td>
                 </tr>
               ) : (
-                safeFiltered.map((o) => {
-                  const due = (o.totalAmount || 0) - (o.paidAmount || 0);
-                  return (
-                    <tr key={o._id || o.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition">
+                customerGroups.flatMap((group, groupIdx) => [
+                  // Customer separator row
+                  <tr key={`customer-${group.id}`} className="bg-slate-100 border-b-2 border-slate-300">
+                    <td colSpan={8} className="py-2.5 px-4">
+                      <div className="flex items-center gap-2">
+                        <svg className="w-4 h-4 text-slate-600" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M8 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM1 14q0-2 3-3l4-1 4 1q3 1 3 3v1H1v-1z"/>
+                        </svg>
+                        <span className="text-sm font-bold text-slate-800">{group.name}</span>
+                        <span className="ml-auto text-xs text-slate-600">({group.orders.length} order{group.orders.length !== 1 ? "s" : ""})</span>
+                      </div>
+                    </td>
+                  </tr>,
+                  // Orders for this customer
+                  ...group.orders.map((o) => {
+                    const due = (o.totalAmount || 0) - (o.paidAmount || 0);
+                    return (
+                      <tr key={o._id || o.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition">
 
                       <td className="py-3 pr-4">
                         <span className="text-xs font-mono font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
@@ -137,8 +168,9 @@ function OrderList({ filtered, onView, onDelete }) {
                         </div>
                       </td>
                     </tr>
-                  );
-                })
+                    );
+                  }),
+                ])
               )}
             </tbody>
           </table>

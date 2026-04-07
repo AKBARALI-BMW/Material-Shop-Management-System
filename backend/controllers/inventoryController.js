@@ -58,7 +58,7 @@ const addStock = async (req, res) => {
 
 const getLowStock = async (req, res) => {
     try{
-        const product = await Product.find({ user: req.user._id, status: {$in: ["Low Stock", "Out Stock"]},
+        const products = await Product.find({ user: req.user._id, status: {$in: ["Low Stock", "Out Stock"]},
         }).sort({stock: 1});
 
         res.status(200).json(products || []);

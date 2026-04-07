@@ -1,12 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/authSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ShopLogo from '../assets/ShopLogo.png';
-
 
 function Register() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, error, success } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
@@ -38,6 +38,16 @@ function Register() {
     e.preventDefault();
     dispatch(registerUser(formData));
   };
+
+  // Navigate to login page after successful registration
+  React.useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Wait 2 seconds to show success message, then navigate
+      return () => clearTimeout(timer);
+    }
+  }, [success, navigate]);
 
   const strengthColor = strength <= 1 ? "#E24B4A" : strength <= 2 ? "#EF9F27" : "#3B6D11";
   const strengthLabel = strength === 0 ? "" : strength <= 1 ? "Weak" : strength <= 2 ? "Fair" : strength <= 3 ? "Good" : "Strong";
@@ -76,7 +86,7 @@ function Register() {
                 <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.2"/>
                 <path d="M4.5 7l2 2 3-3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              Registration successful! You can now sign in.
+              Account created successfully! Redirecting to login page...
             </div>
           )}
 
