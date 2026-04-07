@@ -44,7 +44,7 @@ function Register() {
     if (success) {
       const timer = setTimeout(() => {
         navigate('/login');
-      }, 2000); // Wait 2 seconds to show success message, then navigate
+      }, 2000); 
       return () => clearTimeout(timer);
     }
   }, [success, navigate]);
@@ -106,7 +106,7 @@ function Register() {
                   <input
                     type="text"
                     name="name"
-                    placeholder="John Doe"
+                    placeholder="Enter your full name"
                     onChange={handleChange}
                     className="w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
                   />
@@ -166,7 +166,7 @@ function Register() {
                 <input
                   type="tel"
                   name="mobile"
-                  placeholder="+1 234 567 8900"
+                  placeholder="+92345768950"
                   onChange={handleChange}
                   className="w-full h-11 pl-10 pr-4 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition"
                 />
