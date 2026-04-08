@@ -1,18 +1,18 @@
 const express = require("express");
-const connectDB = require("./config/db");
+const connectDB = require("./backend/config/db");
 const dotenv = require("dotenv");
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
+const authRoutes = require("./backend/routes/authRoutes");
+const userRoutes = require("./backend/routes/userRoutes");
 const cors = require("cors");
 
 
-const settingsRoutes = require("./routes/settingsRoutes");
-const productRoutes = require("./routes/productRoutes");
-const customerRoutes = require("./routes/customerRoutes");
-const inventoryRoutes = require("./routes/inventoryRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const reportRoutes = require("./routes/reportRoutes");
-const dashboardRoutes = require("./routes/dashboardRoutes");
+const settingsRoutes = require("./backend/routes/settingsRoutes");
+const productRoutes = require("./backend/routes/productRoutes");
+const customerRoutes = require("./backend/routes/customerRoutes");
+const inventoryRoutes = require("./backend/routes/inventoryRoutes");
+const orderRoutes = require("./backend/routes/orderRoutes");
+const reportRoutes = require("./backend/routes/reportRoutes");
+const dashboardRoutes = require("./backend/routes/dashboardRoutes");
 
 
 dotenv.config();
@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from uploads directory
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('./backend/uploads'));
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -59,7 +59,3 @@ if (require.main === module) {
     console.log(`Server running on port ${PORT}`);
   });
 }
-
-
-
-
