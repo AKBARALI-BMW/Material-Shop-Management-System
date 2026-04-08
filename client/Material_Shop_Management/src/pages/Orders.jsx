@@ -4,7 +4,7 @@ import { fetchOrders, createOrder, deleteOrder } from "../redux/orderSlice";
 import { fetchCustomers } from "../redux/customerSlice";
 import { fetchProducts }  from "../redux/productSlice";
 import Layout      from "./Layout";
-import OrderList   from "../components/OrderList";
+import OrderList   from "../components/Orderlist";
 import AddOrderModal  from "../components/orders/AddOrderModal";
 import ViewOrderModal from "../components/orders/ViewOrderModal";
 
